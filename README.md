@@ -50,3 +50,268 @@ Step-4:
 ➢ Check in Kubernetes the pods are getting created or not.
 ➢ Now copy the service IP and paste it in the browser and check the output.
 
+
+Solution:
+We will create 3 instances,
+1 Git Client server
+1 Jenkins server
+1 tomcat server in the beginning
+Choose t2. medium instance type for Jenkins since it requires 2 core cpu
+
+
+
+
+Solution:
+
+
+We will create 3 instances, 1 Git Client server
+1 Jenkins server
+1 tomcat server in the beginning
+Choose t2. medium instance type for Jenkins since it requires 2 core cpu
+
+
+
+
+
+
+
+Add Security group rules as suggested below
+
+
+
+
+Connect the instances with the terminal
+
+
+Initialize Git repository , ssh-keygen to connect the git client machine with the git repository.
+
+The files are successfully pushed in the git repository.
+
+
+Add ssh key to github repo to create a link between the github termial and web server
+
+
+
+
+
+
+
+
+Add the git repo to your terminal
+
+
+
+
+
+
+
+
+
+Install Jenkins on your Jenkins terminal
+
+
+
+Open the Jenkins server using the public ip of the instance
+
+
+You can see we have now entered the Jenkins dashboard
+
+
+
+Create API token in Jenkins
+
+
+
+To connect Jenkins with GitHub repository we need to add Webhooks
+
+
+After adding the following we can build Jenkins and test the build is successful.
+
+
+
+Now we will install maven on our server :
+
+
+
+In Jenkins> dashboard > manage Jenkins > available plugins > maven integration >install
+
+
+In installed plugins > type github > disable github branch source plugin and enable github plugin.
+
+
+After installing restart Jenkins
+In Manage Jenkins add tools and paste the java and maven path from Jenkins-server
+
+
+
+
+
+
+
+
+
+You can now build maven and see the successful build below , we have received our git repo modules as seen below
+
+
+The webapp .war file is visible which indicates that maven is building artifacts successfully.
+
+
+
+
+Now we will build Apache tomcat server
+
+
+Download the tomcat using wget command
+
+Open tomcat using the public ip
+
+
+Add user’s admin, deployer and assign roles using vim tomcat-users.xml
+
+
+Shutdown and start the tomcat
+
+
+Now open the Apache tomcat server
+
+
+
+
+
+Expose the web application on tomcat using public Ip on 8080 Port
+
+
+
+
+
+
+
+
+
+
+
+Create global credentials for tomcat server in Jenkins machine To integrate tomat server with Jenkins:
+Go to Manage Jenkins > plugin > available plugins > deploy to container > install Manage Jenkins > Credentials > system > global credentials > add
+Username: deployer Password: deployer
+
+
+
+
+
+
+
+
+
+
+
+
+Docker server
+Launch docker server
+
+Install docker and start the service
+
+
+
+Do SSH-KEYGEN to connect the server with docker server
+
+
+
+
+Configure AWS
+
+
+Copy public Ip address of Jenkins in docker Copy public Ip of Jenkins, docker in Jenkins
+
+
+Now we can ping the terminals of each other and check the terminals are connecte
+
+
+
+
+
+
+
+
+
+
+
+Add ssh server of Jenkins and docker in Jenkins dashboard to connect terminal to jenkins
+
+
+
+
+
+
+
+
+
+From post build actions select build artifacts over ssh
+we are connecting Jenkins with docker by providing docker IP
+
+The commands for creating the image and pushing image into ECR
+
+
+
+
+
+Build again and see build is successful
+
+
+Image is successfully pushed into ECR
+
+
+
+
+
+Kubernetes cluster
+Launch the Kubernetes server
+
+Attach the role to the Kubernetes instance with the access to permissions of eks, elasticcontairregistry and iam full access.
+
+
+
+Configure AWS
+
+Aws user has been configured here through access key and secret key generated in the Aws console.
+Install EKSCTL and KUBECTL
+Create EKS cluster with a name, region, subnets and without nodes.
+
+
+Create node group
+
+
+Create a deployment file
+
+Create a service file
+
+
+Apply the both files
+Kubectl apply -f deployment.yaml Kubectl apply -f service.yaml
+Check the deployment and services
+
+
+
+Copy ssh public keys of Jenkins into Kubernetes and Kubernetes into Jenkins
+
+
+
+
+
+Add Kubernetes server into Jenkins
+
+
+Add build artifacts
+
+Now build the job
+
+
+Expose application using external Ip address It is successfully deployed and running
+
+
+
+In this way we have automated the whole process. If there are any modifications in the jsp file from github jenkins will automatically build the project and the changes will be reflected on the live webpage automatically.
+If there are any errors in the modification the build will be failed and the webpage will not be updated. It will show the last successful built which will help in preventing our webpage from crashing.
+
+
+By- Glenn Muga.
+
